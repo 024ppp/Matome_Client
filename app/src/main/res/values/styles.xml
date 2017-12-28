@@ -14,8 +14,49 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    
+    <style name="title1">
+        <!--<item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>-->
+        <item name="android:background">@drawable/frame_discharge</item>
+        <item name="android:layout_marginRight">@dimen/dp_s</item>
+        <item name="android:layout_marginBottom">@dimen/dp_s</item>
+        <item name="android:textSize">@dimen/sp_m</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/dp_m</item>
+    </style>
+    <style name="title2">
+        <!--<item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>-->
+        <item name="android:background">@drawable/frame_kenryo</item>
+        <item name="android:layout_marginRight">@dimen/dp_s</item>
+        <item name="android:layout_marginBottom">@dimen/dp_s</item>
+        <item name="android:textSize">@dimen/sp_m</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/dp_m</item>
+    </style>
+    <style name="title3">
+        <!--<item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>-->
+        <item name="android:background">@drawable/frame_hokan</item>
+        <item name="android:layout_marginRight">@dimen/dp_s</item>
+        <item name="android:layout_marginBottom">@dimen/dp_s</item>
+        <item name="android:textSize">@dimen/sp_m</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/dp_m</item>
+    </style>
+
+    <style name="item">
+        <!--<item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>-->
+        <item name="android:background">@drawable/frame_item</item>
+        <item name="android:layout_marginRight">@dimen/dp_s</item>
+        <item name="android:layout_marginBottom">@dimen/dp_s</item>
+        <item name="android:textSize">@dimen/sp_m</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/dp_m</item>
+    </style>
 
     <!--  Page1  -->
     <style name="blockBorder">
@@ -33,6 +74,11 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">5dp</item>
     </style>
+    <style name="LinearLayoutStyle2">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
     <style name="TextViewStyle">
         <item name="android:layout_width">125dp</item>
         <item name="android:layout_height">match_parent</item>

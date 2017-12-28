@@ -19,4 +19,9 @@
     <color name="data1">#FFFFFF</color>
     <!-- データ2背景 -->
     <color name="data2">#E6E6E6</color>
+
+    <color name="discharge">#89c3eb</color>
+    <color name="kenryo">#FF4081</color>
+    <color name="hokan">#ffd900</color>
+
 </resources>

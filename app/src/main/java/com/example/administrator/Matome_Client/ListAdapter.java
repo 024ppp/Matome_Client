@@ -24,9 +24,9 @@ class ListAdapter extends ArrayAdapter<Data> {
 
     @Override
     public View getView(final int position, View view, ViewGroup parent) {
-        // layout/raw.xmlを紐付ける
+        // layout/raw_discharge.xmlを紐付ける
         if (view == null) {
-            view = inflater.inflate(R.layout.raw, parent, false);
+            view = inflater.inflate(R.layout.raw_discharge, parent, false);
         }
         final Data data = this.getItem(position);
         TextView tvData1 = (TextView) view.findViewById(R.id.raw1);

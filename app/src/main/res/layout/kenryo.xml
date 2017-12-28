@@ -6,12 +6,6 @@
     android:layout_height="match_parent"
     tools:context="com.example.administrator.Matome_Client.MainActivity">
 
-    <!-- <android.support.design.widget.AppBarLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:theme="@style/AppTheme.AppBarOverlay"/>-->
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,43 +15,55 @@
         android:layout_marginTop="5dp"
         android:orientation="vertical"
         android:weightSum="1">
+
+        <LinearLayout
+            style="@style/LinearLayoutStyle2">
+            <TextView
+                style="@style/title2"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="移動票No."/>
+            <TextView
+                style="@style/item"
+                android:layout_width="158dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtIdo"/>
+            <TextView
+                style="@style/title2"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:text="缶数"/>
+            <TextView
+                style="@style/item"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtCansuu"/>
+        </LinearLayout>
+
         <LinearLayout
             style="@style/LinearLayoutStyle">
-
             <TextView
-                style="@style/title1"
-                android:layout_width="match_parent"
+                style="@style/title2"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/titleVko"
-                android:layout_weight="3"
-                android:text="排出Ｖコン"
-                />
-
+                android:text="配合粉"/>
             <TextView
                 style="@style/item"
-                android:layout_width="match_parent"
+                android:layout_width="188dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/txtVko"
-                android:layout_weight="4"
-                />
-
+                android:id="@+id/txtZainmk"/>
             <TextView
-                style="@style/title1"
-                android:layout_width="match_parent"
+                style="@style/title2"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/titleCan"
-                android:layout_weight="4"
-                android:text="缶計"
-                />
-
+                android:text="重量"/>
             <TextView
                 style="@style/item"
-                android:layout_width="match_parent"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/txtCankei"
-                android:layout_weight="4"
-                />
+                android:id="@+id/txtJuryo"/>
         </LinearLayout>
+
         <View style="@style/blockBorder" />
 
 
@@ -68,24 +74,18 @@
             android:background="@color/black">
 
             <TextView
-                style="@style/title1"
+                style="@style/title2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_weight="5"
                 android:text="@string/title1"/>
 
             <TextView
-                style="@style/title1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="@string/title2"/>
-
-            <TextView
-                style="@style/title1"
+                style="@style/title2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
+                android:gravity="center"
                 android:text="@string/title3"/>
         </LinearLayout>
 
@@ -94,15 +94,15 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:background="@color/black">
-        <ListView
-            android:id="@+id/listCan"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:divider="#000000"
-            android:dividerHeight="1sp"
-            />
-    </LinearLayout>
+            <ListView
+                android:id="@+id/listCan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:divider="#000000"
+                android:dividerHeight="1sp"
+                />
+        </LinearLayout>
 
 
 
