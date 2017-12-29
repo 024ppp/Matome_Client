@@ -30,6 +30,7 @@ tools:context="com.example.administrator.Matome_Client.MainActivity">
             android:layout_width="match_parent"
             android:layout_height="380dp"
             android:layout_weight="0.35"
+            android:focusableInTouchMode="true"
             android:orientation="vertical">
 
             <RelativeLayout

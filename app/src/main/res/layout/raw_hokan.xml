@@ -5,34 +5,26 @@
     android:orientation="horizontal" >
 
     <TextView
+        style="@style/listItemS"
         android:id="@+id/raw1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="5"
-        android:singleLine="true"
-        android:layout_marginRight="@dimen/dp_s"
-        android:gravity="end"
-        android:padding="@dimen/dp_m"
-        android:textSize="@dimen/sp_m" />
+        android:gravity="end"/>
 
     <TextView
+        style="@style/listItemS"
         android:id="@+id/raw2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="4"
-        android:singleLine="true"
-        android:layout_marginRight="@dimen/dp_s"
-        android:padding="@dimen/dp_m"
-        android:textSize="@dimen/sp_m" />
+        android:layout_weight="4" />
 
     <TextView
+        style="@style/listItemS"
         android:id="@+id/raw3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="4"
-        android:singleLine="true"
-        android:gravity="center"
-        android:padding="@dimen/dp_m"
-        android:textSize="@dimen/sp_m" />
+        android:gravity="center"/>
 
 </LinearLayout>

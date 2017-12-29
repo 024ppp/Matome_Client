@@ -12,11 +12,15 @@ import android.os.Message;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -46,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //リスト用のデータを準備
     List<Data> mDataList = new ArrayList<>();
     private int mDisplayMode;
+    private View mView;
+    private EditText txtBcd;
+    // 背景のレイアウト
+    private LinearLayout mainLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +89,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setViews();
         //NFCタグ
         this.nfcTags = new NfcTags(this);
+
+        //test
+        setShowMessage(0);
     }
 
     private void changeMode(int mode, String info) {
@@ -93,60 +104,78 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 1:
                 title = "排出";
                 layoutId = R.layout.discharge;
-                show.setText("No.1の缶タグをタッチしてください。");
                 break;
             case 2:
                 title = "比重";
                 layoutId = R.layout.hijuu;
-                show.setText("缶タグをタッチしてください。");
+                break;
+            case 3:
+                title = "検量";
+                layoutId = R.layout.kenryo;
+                break;
+            case 4:
+                title = "保管";
+                layoutId = R.layout.hokan;
                 break;
             default:
                 return;
         }
+
         //工程名表示
         toolbar.setTitle(title);
         // 変更したいレイアウトを取得する
         LinearLayout layout = (LinearLayout)findViewById(R.id.layout);
+        mainLayout = (LinearLayout) findViewById(R.id.layout);
         // レイアウトのビューをすべて削除する
         layout.removeAllViews();
         // レイアウトを変更する
         getLayoutInflater().inflate(layoutId, layout);
         //変更後のレイアウトをいじるための準備
         View view = getLayoutInflater().inflate(layoutId, layout);
+        mView = view;
 
-        //モード毎の本処理
         switch (mode) {
             case 1:
-                transDischargeMode(mode, info, view);
+                //リスト内容更新
+                displayGetListItem(info);
+                setInfoToTextview(mVkon + "," + mDataList.size());
+                show.setText("No.1の" + "缶タグをタッチしてください。");
+                break;
+            case 2:
+                setShowMessage(88);
+                break;
+            case 3:
+                txtBcd = (EditText) view.findViewById(R.id.txtIdo);
+                addTCL();
+                txtBcd.requestFocus();
+                show.setText("移動票No.をスキャンしてください。");
+                break;
+            case 4:
+                txtBcd = (EditText) view.findViewById(R.id.txtKokban);
+                addTCL();
+                txtBcd.requestFocus();
+                show.setText("工管No.スキャンしてください。");
                 break;
             default:
                 return;
         }
     }
 
-    //List表示汎用にするか？
-    private void transDischargeMode(int mode, String info, View view) {
+    //List表示(汎用)
+    private void displayGetListItem(String info) {
         int listId;
         String[] infoset;
         String[] items;
-        TextView txt1;
-        TextView txt2;
 
-        switch (mode) {
-            case 1:
-                listId = R.id.listCan;
-                infoset = info.split("@");
-                txt1 = (TextView) view.findViewById(R.id.txtVko);
-                txt2 = (TextView) view.findViewById(R.id.txtCankei);
-                break;
-            default:
-                return;
-        }
+        if (mDisplayMode == 1) { listId = R.id.listCan;}
+        else if (mDisplayMode == 3) { listId = R.id.listKen;}
+        else if (mDisplayMode == 4) { listId = R.id.listHok;}
+        else { return;}
 
-        ListView listView = (ListView) view.findViewById(listId);
+        ListView listView = (ListView) mView.findViewById(listId);
 
         //データ格納
-        int cankei = 0;
+        infoset = info.split("@");
         for (int i = 0; i < infoset.length; i++) {
             if (infoset[i].equals("")) {
                 continue;
@@ -154,54 +183,112 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             Data data = new Data();
             items = infoset[i].split(",");
-            for (int j = 0; j < items.length; j++) {
-                switch (j) {
-                    case 0: data.setNumber(items[j]);
-                        break;
-                    case 1: data.setZainmk(items[j]);
-                        break;
-                    case 2: data.setKokban(items[j]);
-                        break;
-                    case 3: data.setCansuu(items[j]);
-                        break;
-                    case 4: data.setVkonno(items[j]);
-                        break;
-                    case 5: data.setMeiban(items[j]);
-                        break;
-                    default:
-                }
-            }
+            //格納処理
+            data.setData(mDisplayMode, items);
             mDataList.add(data);
-            cankei++;
         }
-
-        //画面に出力
-        txt1.setText(mVkon);
-        txt2.setText(String.valueOf(cankei));
-        // リストにデータを受け渡す
-        ListAdapter adapter = new ListAdapter(this, mDataList);
+        //----画面に出力
+        ListAdapter adapter = new ListAdapter(this, mDataList, mDisplayMode);
         listView.setAdapter(adapter);
+    }
+
+    private void setInfoToTextview(String info) {
+        TextView t0, t1, t2, t3, t4, t5, t6, t7;
+        String[] items = info.split(",");
+
+        switch (mDisplayMode) {
+            case 1:
+                t0 = (TextView)mView.findViewById(R.id.txtVko);
+                t1 = (TextView)mView.findViewById(R.id.txtCankei);
+                for (int i = 0; i < items.length; i++) {
+                    if (i == 0) { t0.setText(items[i]); }
+                    else if (i == 1) { t1.setText(items[i]); }
+                }
+                break;
+            case 3:
+                t0 = (TextView)mView.findViewById(R.id.txtZainmk);
+                t1 = (TextView)mView.findViewById(R.id.txtCansuu);
+                t2 = (TextView)mView.findViewById(R.id.txtJuryo);
+                for (int i = 0; i < items.length; i++) {
+                    //配合粉
+                    if (i == 0) { t0.setText(items[i]); }
+                    //缶数
+                    else if (i == 1) {
+                        t1.setText(items[i]);
+                        //缶数をここで抽出しているので、便乗
+                        String txt = "";
+                        for (int j = 0; j < Integer.parseInt(items[i]); j++) {
+                            txt += "@" + String.valueOf(j + 1);
+                        }
+                        displayGetListItem(txt);
+                    }
+                    //重量
+                    else if (i == 2) { t2.setText(items[i] + "g"); }
+                }
+                break;
+            case 4:
+                t0 = (TextView)mView.findViewById(R.id.txtHinban);
+                t1 = (TextView)mView.findViewById(R.id.txtLotno);
+                t2 = (TextView)mView.findViewById(R.id.txtHai1);
+                t3 = (TextView)mView.findViewById(R.id.txtHai2);
+                t4 = (TextView)mView.findViewById(R.id.txtHai3);
+                t5 = (TextView)mView.findViewById(R.id.txtCan1);
+                t6 = (TextView)mView.findViewById(R.id.txtCan2);
+                t7 = (TextView)mView.findViewById(R.id.txtCan3);
+                for (int i = 0; i < items.length; i++) {
+                    if (i == 0) { t0.setText(items[i]); }
+                    else if (i == 1) { t1.setText(items[i]); }
+                    else if (i == 2) { t2.setText(items[i]); }
+                    else if (i == 3) { t3.setText(items[i]); }
+                    else if (i == 4) { t4.setText(items[i]); }
+                    else if (i == 5) { t5.setText(items[i]); }
+                    else if (i == 6) { t6.setText(items[i]); }
+                    else if (i == 7) { t7.setText(items[i]); }
+                }
+                break;
+        }
     }
 
     private void cantagScannedCheck(String can) {
         for (Data data : mDataList) {
-            //缶タグが入ってる場合はスキップ
-            if (!data.getCanTag().equals("")) {
-                //缶タグがスキャン済みの場合はアラート
-                if (data.getCanTag().equals(can)) {
-                    show.setText("缶タグ(" + can + ")はスキャン済みです。");
-                    //バイブ エラー
-                    vib.vibrate(m_vibPattern_error, -1);
-                    return;
+            if (mDisplayMode == 4) {
+                //缶タグが入ってる場合はスキップ
+                if (!data.getCanTag().equals("")) {
+                    //缶タグがスキャン済みの場合はアラート
+                    if (data.getCanTag().equals(can)) {
+                        data.setHantei("OK");
+                        break;
+                    }
+                    continue;
                 }
-                continue;
+                break;
             }
-            data.setCanTag(can);
-            break;
+            else {
+                //缶タグが入ってる場合はスキップ
+                if (!data.getCanTag().equals("")) {
+                    //缶タグがスキャン済みの場合はアラート
+                    if (data.getCanTag().equals(can)) {
+                        show.setText("缶タグ(" + can + ")はスキャン済みです。");
+                        //バイブ エラー
+                        vib.vibrate(m_vibPattern_error, -1);
+                        return;
+                    }
+                    continue;
+                }
+                data.setCanTag(can);
+                break;
+            }
         }
+
         // リストにデータを受け渡す
-        ListView listView = (ListView) findViewById(R.id.listCan);
-        ListAdapter adapter = new ListAdapter(this, mDataList);
+        int listId;
+        if (mDisplayMode == 1) { listId = R.id.listCan;}
+        else if (mDisplayMode == 3) { listId = R.id.listKen;}
+        else if (mDisplayMode == 4) { listId = R.id.listHok;}
+        else { return;}
+
+        ListView listView = (ListView) findViewById(listId);
+        ListAdapter adapter = new ListAdapter(this, mDataList, mDisplayMode);
         listView.setAdapter(adapter);
 
         //登録可能かチェックして、登録ボタンを有効化する
@@ -211,14 +298,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void confirmRegisterable() {
         int number = 0;
         for (Data data : mDataList) {
-            number++;
-            if (data.getCanTag().equals("")) {
-                show.setText("No." + String.valueOf(number) + "の缶タグをタッチしてください。");
-                return;
+            if (mDisplayMode == 4) {
+                if (data.getHantei().equals("")) {
+                    show.setText("缶タグをタッチしてください。");
+                    return;
+                }
+            }
+            else {
+                number++;
+                if (data.getCanTag().equals("")) {
+                    show.setText("No." + String.valueOf(number) + "の缶タグをタッチしてください。");
+                    return;
+                }
             }
         }
-        //登録ボタンを無効化
-        btnUpd.setEnabled(false);
+        //登録可能状態にする
         setShowMessage(99);
     }
 
@@ -236,8 +330,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if (cmd.equals(pc.VKO.getString())) {
             changeMode(1, excmd);
         }
+        else if (cmd.equals(pc.IDO.getString())) {
+            setInfoToTextview(excmd);
+            setShowMessage(88);
+        }
+        else if (cmd.equals(pc.KOB.getString())) {
+            String[] buf = excmd.split("#");
+            setInfoToTextview(buf[0]);
+            displayGetListItem(buf[1]);
+            setShowMessage(88);
+        }
+
         else if (cmd.equals(pc.DUP.getString())
                 || cmd.equals(pc.HUP.getString())
+                || cmd.equals(pc.KUP.getString())
+                || cmd.equals(pc.SUP.getString())
                 ) {
             MyToast.makeText(this, "登録完了しました。", Toast.LENGTH_SHORT, 32f).show();
             initPage();
@@ -328,7 +435,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     // OK button pressed
                                     switch (mDisplayMode) {
                                         case 1:
-                                            sendMsgToServer(pc.DUP.getString() + createUpdtext_D());
+                                            sendMsgToServer(pc.DUP.getString() + createUpdtext());
+                                            break;
+                                        case 3:
+                                            sendMsgToServer(pc.KUP.getString() + createUpdtext());
+                                            break;
+                                        case 4:
+                                            sendMsgToServer(pc.SUP.getString() + createUpdtext());
                                             break;
                                     }
                                 }
@@ -358,14 +471,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     //登録ボタン押下時にサーバに送る更新値の生成
-    private String createUpdtext_D() {
+    private String createUpdtext() {
         String txt = "";
-
-        for (Data data : mDataList) {
-            txt += "@";
-            txt += data.getCanTag() + ",";
-            txt += data.getVkonno() + ",";
-            txt += data.getMeiban();
+        switch (mDisplayMode) {
+            case 1:
+                for (Data data : mDataList) {
+                    txt += "@";
+                    txt += data.getCanTag() + ",";
+                    txt += data.getVkonno() + ",";
+                    txt += data.getMeiban();
+                }
+                break;
+            case 3:
+                for (Data data : mDataList) {
+                    txt += "@";
+                    txt += data.getCanTag() + ",";
+                    txt += txtBcd.getText().toString();
+                }
+                break;
+            case 4:
+                for (Data data : mDataList) {
+                    txt += "@";
+                    txt += data.getCanTag();
+                }
+                break;
         }
         return txt;
     }
@@ -410,6 +539,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 3:
                 show.setText("箱をタッチしてください。");
                 break;
+            case 88:
+                show.setText("缶タグをタッチしてください。");
+                break;
             case 99:
                 show.setText("全てOKです。\n登録してください。");
                 btnUpd.setEnabled(true);
@@ -428,6 +560,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             default:
                 break;
         }
+    }
+
+    //TextView Listener
+    private void addTCL() {
+        //バーコードリーダー対応
+        txtBcd.addTextChangedListener(new TextWatcher(){
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count){
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                //DEBUG
+                //Log.d("test", "afterTextChanged");
+                if (txtBcd.getText().length() >= 6) {
+                    //工程管理Noが6文字以上になったら、工程管理番号問い合わせをサーバーに送信する
+                    String cmd = "";
+                    if (mDisplayMode == 3) { cmd = pc.IDO.getString();}
+                    else if (mDisplayMode == 4) { cmd = pc.KOB.getString();}
+
+                    sendMsgToServer(cmd + txtBcd.getText().toString());
+                    //キーボードをしまう
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(txtBcd.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    //out focus
+                    mainLayout.requestFocus();
+                }
+            }
+        });
     }
 
     private void setViews() {
@@ -535,7 +698,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     private PendingIntent createPendingIntent() {
         Intent intent = new Intent(this, MainActivity.class);

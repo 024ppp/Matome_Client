@@ -1,5 +1,8 @@
 package com.example.administrator.Matome_Client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // データ格納用クラス
 class Data {
     private String number = "";
@@ -9,6 +12,52 @@ class Data {
     private String vkonno = "";
     private String meiban = "";
     private String canTag = "";
+    private String hantei = "";
+
+    public void setData(int mode, String[] items) {
+        for (int i = 0; i < items.length; i++) {
+            switch (mode) {
+                //排出
+                case 1:
+                    switch (i) {
+                        case 0: setNumber(items[i]);
+                            break;
+                        case 1: setZainmk(items[i]);
+                            break;
+                        case 2: setKokban(items[i]);
+                            break;
+                        case 3: setCansuu(items[i]);
+                            break;
+                        case 4: setVkonno(items[i]);
+                            break;
+                        case 5: setMeiban(items[i]);
+                            break;
+                        default:
+                    }
+                    break;
+
+                //検量
+                case 3:
+                    switch (i) {
+                        case 0: setNumber(items[i]);
+                            break;
+                        default:
+                    }
+                    break;
+                //保管
+                case 4:
+                    switch (i) {
+                        case 0: setNumber(items[i]);
+                            break;
+                        case 1: setCanTag(items[i]);
+                            break;
+                        default:
+                    }
+                    break;
+                default:
+            }
+        }
+    }
 
     public void setNumber(String tmp) {
         this.number = tmp;
@@ -57,6 +106,13 @@ class Data {
     }
     public String getCanTag() {
         return canTag;
+    }
+
+    public void setHantei(String tmp) {
+        this.hantei = tmp;
+    }
+    public String getHantei() {
+        return hantei;
     }
 
 }

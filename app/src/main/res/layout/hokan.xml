@@ -20,14 +20,17 @@
             style="@style/LinearLayoutStyle2">
             <TextView
                 style="@style/title3"
-                android:layout_width="80dp"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:text="工管No."/>
-            <TextView
-                style="@style/item"
-                android:layout_width="158dp"
+            <EditText
+                style="@style/itemS"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtKokban"/>
+            <android.support.v4.widget.Space
+                android:layout_width="4dp"
+                android:layout_height="wrap_content" />
             <TextView
                 style="@style/title3"
                 android:layout_width="100dp"
@@ -45,21 +48,24 @@
             style="@style/LinearLayoutStyle2">
             <TextView
                 style="@style/title3"
-                android:layout_width="80dp"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:text="品番"/>
             <TextView
-                style="@style/item"
-                android:layout_width="158dp"
+                style="@style/itemS"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtHinban"/>
+            <android.support.v4.widget.Space
+                android:layout_width="4dp"
+                android:layout_height="wrap_content" />
             <TextView
-                style="@style/item"
+                style="@style/itemS"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtHai1"/>
             <TextView
-                style="@style/item"
+                style="@style/itemS"
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtCan1"/>
@@ -69,21 +75,24 @@
             style="@style/LinearLayoutStyle2">
             <TextView
                 style="@style/title3"
-                android:layout_width="80dp"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:text="ﾛｯﾄNo."/>
             <TextView
-                style="@style/item"
-                android:layout_width="158dp"
+                style="@style/itemS"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtLotno"/>
+            <android.support.v4.widget.Space
+                android:layout_width="4dp"
+                android:layout_height="wrap_content" />
             <TextView
-                style="@style/item"
+                style="@style/itemS"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtHai2"/>
             <TextView
-                style="@style/item"
+                style="@style/itemS"
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtCan2"/>
@@ -91,18 +100,16 @@
 
         <LinearLayout
             style="@style/LinearLayoutStyle2">
+            <android.support.v4.widget.Space
+                android:layout_width="216dp"
+                android:layout_height="wrap_content" />
             <TextView
-                style="@style/title3"
-                android:layout_width="239dp"
-                android:layout_height="wrap_content"
-                android:visibility="invisible"/>
-            <TextView
-                style="@style/item"
+                style="@style/itemS"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtHai3"/>
             <TextView
-                style="@style/item"
+                style="@style/itemS"
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtCan3"/>
@@ -114,8 +121,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@color/black">
+            android:orientation="horizontal">
 
             <TextView
                 style="@style/title3"
@@ -144,7 +150,7 @@
             android:orientation="horizontal"
             android:background="@color/black">
             <ListView
-                android:id="@+id/listCan"
+                android:id="@+id/listHok"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

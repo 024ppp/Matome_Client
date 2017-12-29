@@ -32,9 +32,9 @@
         <item name="android:background">@drawable/frame_kenryo</item>
         <item name="android:layout_marginRight">@dimen/dp_s</item>
         <item name="android:layout_marginBottom">@dimen/dp_s</item>
-        <item name="android:textSize">@dimen/sp_m</item>
+        <item name="android:textSize">@dimen/sp_s</item>
         <item name="android:gravity">center</item>
-        <item name="android:padding">@dimen/dp_m</item>
+        <item name="android:padding">@dimen/dp_s</item>
     </style>
     <style name="title3">
         <!--<item name="android:layout_width">match_parent</item>
@@ -42,9 +42,9 @@
         <item name="android:background">@drawable/frame_hokan</item>
         <item name="android:layout_marginRight">@dimen/dp_s</item>
         <item name="android:layout_marginBottom">@dimen/dp_s</item>
-        <item name="android:textSize">@dimen/sp_m</item>
+        <item name="android:textSize">@dimen/sp_s</item>
         <item name="android:gravity">center</item>
-        <item name="android:padding">@dimen/dp_m</item>
+        <item name="android:padding">@dimen/dp_s</item>
     </style>
 
     <style name="item">
@@ -56,6 +56,35 @@
         <item name="android:textSize">@dimen/sp_m</item>
         <item name="android:gravity">center</item>
         <item name="android:padding">@dimen/dp_m</item>
+        <item name="android:maxLines">1</item>
+    </style>
+    <style name="itemS">
+        <!--<item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>-->
+        <item name="android:background">@drawable/frame_item</item>
+        <item name="android:layout_marginRight">@dimen/dp_s</item>
+        <item name="android:layout_marginBottom">@dimen/dp_s</item>
+        <item name="android:textSize">@dimen/sp_s</item>
+        <item name="android:gravity">left</item>
+        <item name="android:padding">@dimen/dp_s</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="listItem">
+        <item name="android:layout_marginLeft">@dimen/dp_ss</item>
+        <item name="android:layout_marginRight">@dimen/dp_ss</item>
+        <item name="android:layout_marginBottom">@dimen/dp_ss</item>
+        <item name="android:textSize">@dimen/sp_m</item>
+        <item name="android:padding">@dimen/dp_m</item>
+        <!--<item name="android:maxLines">1</item>-->
+    </style>
+    <style name="listItemS">
+        <item name="android:layout_marginLeft">@dimen/dp_ss</item>
+        <item name="android:layout_marginRight">@dimen/dp_ss</item>
+        <item name="android:layout_marginBottom">@dimen/dp_ss</item>
+        <item name="android:textSize">@dimen/sp_s</item>
+        <item name="android:padding">@dimen/dp_s</item>
+        <!--<item name="android:maxLines">1</item>-->
     </style>
 
     <!--  Page1  -->
