@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //設定値
     int mSettingValue;
 
-    // 背景のレイアウト
+    //背景のレイアウト
     private LinearLayout mainLayout;
 
     @Override
