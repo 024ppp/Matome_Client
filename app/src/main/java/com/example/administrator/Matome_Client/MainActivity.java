@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -31,9 +32,11 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Toolbar toolbar;
-    TextView show;
+    TextView show, txtKeiryo;
     Button btnClear, btnUpd;
+    EditText txtBcd;
     Handler handler;
+    Runnable runnable;
     String ip;
     int myPort;
     // サーバと通信するスレッド
@@ -47,11 +50,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private long m_vibPattern_read[] = {0, 200};
     private long m_vibPattern_error[] = {0, 200, 200, 500};
     private String mVkon;
+    //タイマーの間隔
+    private long mDelay = 1000;
     //リスト用のデータを準備
     List<Data> mDataList = new ArrayList<>();
     private int mDisplayMode;
     private View mView;
-    private EditText txtBcd;
+    //設定値
+    int mSettingValue;
+
     // 背景のレイアウト
     private LinearLayout mainLayout;
 
@@ -85,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //バイブ
         vib = (Vibrator)getSystemService(VIBRATOR_SERVICE);
         // view取得
-        toolbar = (Toolbar) findViewById(R.id.toolBar);
         setViews();
         //NFCタグ
         this.nfcTags = new NfcTags(this);
@@ -117,6 +123,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 title = "保管";
                 layoutId = R.layout.hokan;
                 break;
+            case 5:
+                title = "缶クリア";
+                layoutId = R.layout.clear;
+                break;
             default:
                 return;
         }
@@ -145,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 setShowMessage(88);
                 break;
             case 3:
+                txtKeiryo = (TextView) view.findViewById(R.id.txtKeiryo);
                 txtBcd = (EditText) view.findViewById(R.id.txtIdo);
                 addTCL();
                 txtBcd.requestFocus();
@@ -154,7 +165,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 txtBcd = (EditText) view.findViewById(R.id.txtKokban);
                 addTCL();
                 txtBcd.requestFocus();
-                show.setText("工管No.スキャンしてください。");
+                show.setText("工管No.をスキャンしてください。");
+                break;
+            case 5:
+                setShowMessage(88);
                 break;
             default:
                 return;
@@ -222,8 +236,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                         displayGetListItem(txt);
                     }
-                    //重量
-                    else if (i == 2) { t2.setText(items[i] + "g"); }
+                    //設定値
+                    else if (i == 2) {
+                        t2.setText(items[i]);
+                        mSettingValue = Integer.valueOf(items[i]);
+                    }
                 }
                 break;
             case 4:
@@ -295,12 +312,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         confirmRegisterable();
     }
 
+    //登録可能かどうかチェック。検量モード時のみ計量値取得モードへの移行
     private void confirmRegisterable() {
         int number = 0;
         for (Data data : mDataList) {
             if (mDisplayMode == 4) {
                 if (data.getHantei().equals("")) {
                     show.setText("缶タグをタッチしてください。");
+                    btnUpd.setEnabled(false);
                     return;
                 }
             }
@@ -308,12 +327,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 number++;
                 if (data.getCanTag().equals("")) {
                     show.setText("No." + String.valueOf(number) + "の缶タグをタッチしてください。");
+                    btnUpd.setEnabled(false);
                     return;
                 }
             }
         }
-        //登録可能状態にする
-        setShowMessage(99);
+        if (mDisplayMode == 3) {
+            //検量モード時は、計量値定期取得を実行する
+            getMeasuringValueRegularly();
+        }
+        else {
+            //登録可能状態にする
+            setShowMessage(99);
+        }
     }
 
     //受信した文字列のコマンド値によって分岐（switch文ではenum使えず...if文汚し）
@@ -340,7 +366,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             displayGetListItem(buf[1]);
             setShowMessage(88);
         }
-
         else if (cmd.equals(pc.DUP.getString())
                 || cmd.equals(pc.HUP.getString())
                 || cmd.equals(pc.KUP.getString())
@@ -349,12 +374,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             MyToast.makeText(this, "登録完了しました。", Toast.LENGTH_SHORT, 32f).show();
             initPage();
         }
-        else if (cmd.equals(pc.MSG.getString())) {
+        else if (cmd.equals(pc.MSV.getString())) {
+            checkMeasuringValue(excmd);
+        }
+        else if (cmd.equals(pc.CLR.getString())) {
+            //バイブ エラー
+            vib.vibrate(m_vibPattern_error, -1);
             show.setText(excmd);
+            txtBcd.setText("");
+            txtBcd.requestFocus();
+        }
+        else if (cmd.equals(pc.MSG.getString())) {
+            if (!excmd.equals("")) {
+                show.setText(excmd);
+            }
         }
         else if (cmd.equals(pc.ERR.getString())) {
             //バイブ エラー
             vib.vibrate(m_vibPattern_error, -1);
+            show.setText(excmd);
+            if (mDisplayMode == 3) {
+                //検量モードで缶スキャンミスをした場合
+                initListView();
+            }
         }
     }
 
@@ -373,9 +415,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if (cmd.equals(pc.CAN.getString())) {
             if (mDisplayMode != 0) {
                 if (mDisplayMode == 2) {
+                    //比重
                     sendMsgToServer(pc.HUP.getString() + sMsg);
                 }
+                else if (mDisplayMode == 5) {
+                    //缶クリア
+                    sendMsgToServer(pc.CLR.getString() + sMsg);
+                }
                 else {
+                    //その他
                     cantagScannedCheck(sMsg);
                 }
             }
@@ -392,6 +440,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     case "HOKAN":
                         changeMode(4, "");
                         break;
+                    case "CLEAR":
+                        changeMode(5, "");
+                        break;
                 }
             }
         }
@@ -404,6 +455,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    //計量値取得を定期実行
+    private void getMeasuringValueRegularly() {
+        final Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                //計量値取得コマンド
+                sendMsgToServer(pc.MSV.getString());
+                handler.postDelayed(this, mDelay);
+            }
+        };
+        handler.post(r);
+        runnable = r;
+    }
+    //取得した計量値を表示、設定値での判定を行う
+    private void checkMeasuringValue(String info) {
+        double value = Double.valueOf(info);
+        double min = mSettingValue * 0.9;
+        double max = mSettingValue * 1.1;
+
+        //計量値を判定。よければ登録ボタン有効化
+        if (min < value && value < max) {
+            txtKeiryo.setBackground(ContextCompat.getDrawable(this, R.drawable.ok));
+            setShowMessage(99);
+        }
+        else if (min > value) {
+            txtKeiryo.setBackground(ContextCompat.getDrawable(this, R.drawable.low));
+            btnUpd.setEnabled(false);
+            show.setText("設定値以下です。");
+        }
+        else if (value > max) {
+            txtKeiryo.setBackground(ContextCompat.getDrawable(this, R.drawable.high));
+            btnUpd.setEnabled(false);
+            show.setText("設定値以上です。");
+        }
+        txtKeiryo.setText(info);
+    }
+
     private void initPage() {
         //登録ボタンを無効化
         btnUpd.setEnabled(false);
@@ -411,12 +499,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //リスト用データを初期化
         mDataList = new ArrayList<>();
+        //PLC自動取得を解除
+        if (mDisplayMode == 3) {
+            handler.removeCallbacks(runnable);
+        }
         //TOPに戻る
         mDisplayMode = 0;
         toolbar.setTitle("まとめ配合TOP");
         LinearLayout layout = (LinearLayout)findViewById(R.id.layout);
         layout.removeAllViews();
         getLayoutInflater().inflate(R.layout.nfcimag, layout);
+    }
+
+    private void initListView() {
+        int listId;
+        switch (mDisplayMode) {
+            case 3:
+                for (Data data : mDataList) {
+                    data.setCanTag("");
+                }
+                listId = R.id.listKen;
+                //PLC自動取得を解除
+                handler.removeCallbacks(runnable);
+                txtKeiryo.setText("");
+                txtKeiryo.setBackground(ContextCompat.getDrawable(this, R.drawable.frame_item));
+                btnUpd.setEnabled(false);
+                show.setText(show.getText().toString() + "\nNo.1の缶タグをタッチしてください。");
+                break;
+            default:
+                return;
+        }
+        // リストにデータを受け渡す
+        ListView listView = (ListView) findViewById(listId);
+        ListAdapter adapter = new ListAdapter(this, mDataList, mDisplayMode);
+        listView.setAdapter(adapter);
     }
 
     @Override
@@ -486,7 +602,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 for (Data data : mDataList) {
                     txt += "@";
                     txt += data.getCanTag() + ",";
-                    txt += txtBcd.getText().toString();
+                    txt += txtBcd.getText().toString() + ",";
+                    txt += txtKeiryo.getText().toString();
                 }
                 break;
             case 4:
@@ -594,6 +711,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setViews() {
+        toolbar = (Toolbar) findViewById(R.id.toolBar);
         toolbar.setTitle("まとめ配合TOP");
         setSupportActionBar(toolbar);
 

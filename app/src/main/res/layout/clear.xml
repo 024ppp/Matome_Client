@@ -3,6 +3,9 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+
+
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
@@ -15,12 +18,13 @@
             android:adjustViewBounds="true"
             android:gravity="center">
             <TextView
+                android:id="@+id/textView4"
                 android:layout_width="200dp"
                 android:layout_height="50dp"
                 android:gravity="center"
-                android:background ="@color/title2"
+                android:background ="@color/white"
                 android:textSize="20dp"
-                android:text="比重Mode" />
+                android:text="CLEAR MODE" />
         </LinearLayout>
 
     </RelativeLayout>

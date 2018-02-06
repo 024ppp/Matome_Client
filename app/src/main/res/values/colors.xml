@@ -24,4 +24,8 @@
     <color name="kenryo">#FF4081</color>
     <color name="hokan">#ffd900</color>
 
+    <color name="ok">#9AFE2E</color>
+    <color name="low">#2E9AFE</color>
+    <color name="high">#FE2E2E</color>
+
 </resources>

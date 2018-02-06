@@ -5,7 +5,7 @@
     android:orientation="horizontal" >
 
     <TextView
-        style="@style/listItemS"
+        style="@style/listItem"
         android:id="@+id/raw1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,11 +13,11 @@
         android:gravity="end"/>
 
     <TextView
-        style="@style/listItemS"
+        style="@style/listItem"
         android:id="@+id/raw2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="3"
+        android:layout_weight="1"
         android:gravity="center"/>
 
 </LinearLayout>

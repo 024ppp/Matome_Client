@@ -60,6 +60,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/txtCankei"
                 android:layout_weight="4.5"
+                android:gravity="center"
                 />
         </LinearLayout>
         <View style="@style/blockBorder" />

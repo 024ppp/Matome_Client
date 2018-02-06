@@ -25,27 +25,13 @@
                 android:text="工管No."/>
             <EditText
                 style="@style/itemS"
-                android:layout_width="150dp"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtKokban"/>
-            <android.support.v4.widget.Space
-                android:layout_width="4dp"
-                android:layout_height="wrap_content" />
-            <TextView
-                style="@style/title3"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="配合粉"/>
-            <TextView
-                style="@style/title3"
-                android:layout_width="30dp"
-                android:layout_height="wrap_content"
-                android:text="缶"/>
-
         </LinearLayout>
 
         <LinearLayout
-            style="@style/LinearLayoutStyle2">
+            style="@style/LinearLayoutStyle">
             <TextView
                 style="@style/title3"
                 android:layout_width="60dp"
@@ -53,69 +39,94 @@
                 android:text="品番"/>
             <TextView
                 style="@style/itemS"
-                android:layout_width="150dp"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtHinban"/>
             <android.support.v4.widget.Space
-                android:layout_width="4dp"
+                android:layout_width="5dp"
                 android:layout_height="wrap_content" />
             <TextView
-                style="@style/itemS"
-                android:layout_width="100dp"
+                style="@style/title3"
+                android:layout_width="54dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/txtHai1"/>
+                android:text="ﾛｯﾄNo."/>
             <TextView
                 style="@style/itemS"
-                android:layout_width="30dp"
+                android:layout_width="55dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/txtCan1"/>
+                android:id="@+id/txtLotno"/>
         </LinearLayout>
 
         <LinearLayout
             style="@style/LinearLayoutStyle2">
             <TextView
                 style="@style/title3"
-                android:layout_width="60dp"
+                android:layout_width="201dp"
                 android:layout_height="wrap_content"
-                android:text="ﾛｯﾄNo."/>
+                android:text="内容"/>
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/LinearLayoutStyle2">
+            <TextView
+                style="@style/title3"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:text="配合粉"/>
+            <TextView
+                style="@style/title3"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:text="缶"/>
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/LinearLayoutStyle2">
             <TextView
                 style="@style/itemS"
-                android:layout_width="150dp"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/txtLotno"/>
-            <android.support.v4.widget.Space
-                android:layout_width="4dp"
-                android:layout_height="wrap_content" />
+                android:id="@+id/txtHai1"/>
             <TextView
                 style="@style/itemS"
-                android:layout_width="100dp"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:id="@+id/txtCan1"/>
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/LinearLayoutStyle2">
+            <TextView
+                style="@style/itemS"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtHai2"/>
             <TextView
                 style="@style/itemS"
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:id="@+id/txtCan2"/>
         </LinearLayout>
 
         <LinearLayout
             style="@style/LinearLayoutStyle2">
-            <android.support.v4.widget.Space
-                android:layout_width="216dp"
-                android:layout_height="wrap_content" />
             <TextView
                 style="@style/itemS"
-                android:layout_width="100dp"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtHai3"/>
             <TextView
                 style="@style/itemS"
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:id="@+id/txtCan3"/>
         </LinearLayout>
 
-        <View style="@style/blockBorder" />
+
+        <View style="@style/blockBorder2" />
 
 
         <LinearLayout
@@ -133,7 +144,7 @@
                 style="@style/title3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_weight="2.5"
                 android:gravity="center"
                 android:text="@string/title3"/>
             <TextView
