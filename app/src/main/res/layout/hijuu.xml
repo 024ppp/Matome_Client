@@ -15,12 +15,13 @@
             android:adjustViewBounds="true"
             android:gravity="center">
             <TextView
-                android:layout_width="200dp"
-                android:layout_height="50dp"
+                android:layout_width="175dp"
+                android:layout_height="175dp"
                 android:gravity="center"
-                android:background ="@color/title2"
-                android:textSize="20dp"
-                android:text="比重Mode" />
+                android:background ="@drawable/frame_hijuu"
+                android:textSize="@dimen/sp_l"
+                android:textColor="@color/white"
+                android:text="比重モード" />
         </LinearLayout>
 
     </RelativeLayout>

@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //バイブ
     Vibrator vib;
     private long m_vibPattern_read[] = {0, 200};
-    private long m_vibPattern_error[] = {0, 200, 200, 500};
+    private long m_vibPattern_error[] = {0, 500, 200, 500};
     private String mVkon;
     //タイマーの間隔
     private long mDelay = 1000;
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.nfcTags = new NfcTags(this);
 
         //test
-        setShowMessage(0);
+        //setShowMessage(0);
     }
 
     private void changeMode(int mode, String info) {
@@ -335,6 +335,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (mDisplayMode == 3) {
             //検量モード時は、計量値定期取得を実行する
             getMeasuringValueRegularly();
+            setShowMessage(90);
         }
         else {
             //登録可能状態にする
@@ -371,11 +372,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 || cmd.equals(pc.KUP.getString())
                 || cmd.equals(pc.SUP.getString())
                 ) {
-            MyToast.makeText(this, "登録完了しました。", Toast.LENGTH_SHORT, 32f).show();
+            //MyToast.makeText(this, "登録完了しました。", Toast.LENGTH_SHORT, 32f).show();
             initPage();
+            setShowMessage(10);
         }
         else if (cmd.equals(pc.MSV.getString())) {
-            checkMeasuringValue(excmd);
+            //checkMeasuringValue(excmd);
+            txtKeiryo.setText(excmd);
+        }
+        else if (cmd.equals(pc.CNN.getString())) {
+            setShowMessage(0);
         }
         else if (cmd.equals(pc.CLR.getString())) {
             //バイブ エラー
@@ -495,7 +501,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initPage() {
         //登録ボタンを無効化
         btnUpd.setEnabled(false);
-        setShowMessage(0);
 
         //リスト用データを初期化
         mDataList = new ArrayList<>();
@@ -576,6 +581,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 public void onClick(DialogInterface dialog, int which) {
                                     // OK button pressed
                                     initPage();
+                                    setShowMessage(0);
                                 }
                             })
                             .setNegativeButton("Cancel", null)
@@ -656,8 +662,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 3:
                 show.setText("箱をタッチしてください。");
                 break;
+            case 10:
+                show.setText("登録完了しました。\nOPEタグをタッチしてください。");
+                break;
             case 88:
                 show.setText("缶タグをタッチしてください。");
+                break;
+            case 90:
+                show.setText("検量が完了した後、登録してください。");
+                btnUpd.setEnabled(true);
                 break;
             case 99:
                 show.setText("全てOKです。\n登録してください。");

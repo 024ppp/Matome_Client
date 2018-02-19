@@ -63,6 +63,7 @@ tools:context="com.example.administrator.Matome_Client.MainActivity">
                 android:background="#ffff"
                 android:gravity="center_vertical"
                 android:textColor="#FF0000"
+                android:text="サーバ接続エラー。"
                 android:textSize="20sp" />
 
             <LinearLayout
