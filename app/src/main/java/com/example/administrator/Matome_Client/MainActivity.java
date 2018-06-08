@@ -32,7 +32,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Toolbar toolbar;
-    TextView show, txtKeiryo;
+    TextView show, txtKeiryo, txtSabun;
     Button btnClear, btnUpd;
     EditText txtBcd;
     Handler handler;
@@ -58,6 +58,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private View mView;
     //設定値
     int mSettingValue;
+    //収量測定開始時の重量
+    int mOriginalValue;
+    //風袋重量
+    int mHuutai;
+
 
     //背景のレイアウト
     private LinearLayout mainLayout;
@@ -112,11 +117,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 layoutId = R.layout.discharge;
                 break;
             case 2:
-                title = "比重";
+                title = "検量＆比重";
                 layoutId = R.layout.hijuu;
                 break;
             case 3:
-                title = "検量";
+                title = "収量";
                 layoutId = R.layout.kenryo;
                 break;
             case 4:
@@ -156,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case 3:
                 txtKeiryo = (TextView) view.findViewById(R.id.txtKeiryo);
+                txtSabun = (TextView) view.findViewById(R.id.txtSabun);
                 txtBcd = (EditText) view.findViewById(R.id.txtIdo);
                 addTCL();
                 txtBcd.requestFocus();
@@ -241,6 +247,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         t2.setText(items[i]);
                         mSettingValue = Integer.valueOf(items[i]);
                     }
+                    //20180516 検量減算式に改修
+                    else if (i == 3) {
+                        mOriginalValue = Integer.valueOf(items[i]);
+                    }
                 }
                 break;
             case 4:
@@ -268,7 +278,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void cantagScannedCheck(String can) {
         for (Data data : mDataList) {
-            if (mDisplayMode == 4) {
+            //20180606 排出時に缶チェックを行う
+            if (mDisplayMode == 1) {
+                //缶タグが入ってる場合はスキップ
+                if (!data.getCanTag().equals("")) {
+                    //缶タグがスキャン済みの場合はアラート
+                    if (data.getCanTag().equals(can)) {
+                        show.setText("缶タグ(" + can + ")はスキャン済みです。");
+                        //バイブ エラー
+                        vib.vibrate(m_vibPattern_error, -1);
+                        return;
+                    }
+                    continue;
+                }
+                //缶がクリア済みかどうか確認
+                sendMsgToServer("CCC" + can);
+                return;
+            }
+            //20180516 検量減算式に改修
+            else if (mDisplayMode == 3) {
+                //缶タグが入ってる場合はスキップ
+                if (!data.getCanTag().equals("")) {
+                    //缶タグがスキャン済みの場合はアラート
+                    if (data.getCanTag().equals(can)) {
+                        show.setText("缶タグ(" + can + ")はスキャン済みです。");
+                        //バイブ エラー
+                        vib.vibrate(m_vibPattern_error, -1);
+                        return;
+                    }
+                    continue;
+                }
+                //缶が収量測定済みかどうか確認
+                sendMsgToServer(pc.TCD.getString() + can);
+                return;
+            }
+            else if (mDisplayMode == 4) {
                 //缶タグが入ってる場合はスキップ
                 if (!data.getCanTag().equals("")) {
                     //缶タグがスキャン済みの場合はアラート
@@ -378,8 +422,70 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if (cmd.equals(pc.MSV.getString())) {
             //checkMeasuringValue(excmd);
-            txtKeiryo.setText(excmd);
+            //20180516 検量減算式に改修
+            //20180605 風袋重量
+            //txtKeiryo.setText(excmd);
+            Double val = Double.valueOf(excmd);
+            if (val <= 0) {
+                //txtKeiryo.setText("error!!");
+                return;
+            }
+            int keiryo = (int)(mOriginalValue - val - mHuutai);
+            //計量値
+            txtKeiryo.setText(String.valueOf(keiryo));
+            //差分
+            txtSabun.setText(String.valueOf(mSettingValue - keiryo));
         }
+
+        //20180516 検量減算式に改修
+        else if (cmd.equals(pc.TCD.getString())) {
+            for (Data data : mDataList) {
+                //缶タグが入ってる場合はスキップ
+                if (!data.getCanTag().equals("")) {
+                    continue;
+                }
+                //20180605 風袋重量
+                String[] buf = excmd.split(",");
+                data.setCanTag(buf[0]);
+                mHuutai += Integer.parseInt(buf[1]);
+                break;
+            }
+
+            // リストにデータを受け渡す
+            int listId;
+            listId = R.id.listKen;
+
+            ListView listView = (ListView) findViewById(listId);
+            ListAdapter adapter = new ListAdapter(this, mDataList, mDisplayMode);
+            listView.setAdapter(adapter);
+
+            //登録可能かチェックして、登録ボタンを有効化する
+            confirmRegisterable();
+        }
+
+        //20180606 排出時の缶チェック
+        else if (cmd.equals("CCC")) {
+            for (Data data : mDataList) {
+                //缶タグが入ってる場合はスキップ
+                if (!data.getCanTag().equals("")) {
+                    continue;
+                }
+                data.setCanTag(excmd);
+                break;
+            }
+
+            // リストにデータを受け渡す
+            int listId;
+            listId = R.id.listCan;
+
+            ListView listView = (ListView) findViewById(listId);
+            ListAdapter adapter = new ListAdapter(this, mDataList, mDisplayMode);
+            listView.setAdapter(adapter);
+
+            //登録可能かチェックして、登録ボタンを有効化する
+            confirmRegisterable();
+        }
+
         else if (cmd.equals(pc.CNN.getString())) {
             setShowMessage(0);
         }
@@ -404,6 +510,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 initListView();
             }
         }
+        //20180516 検量減算式に改修
+        //苦肉の策
+        else if (cmd.equals("ER2")) {
+            //バイブ エラー
+            vib.vibrate(m_vibPattern_error, -1);
+            show.setText(excmd);
+        }
+        else if (cmd.equals("STT")) {
+            //ダイアログで缶状態を表示する
+            excmd = excmd.replace(",","\n");
+            //Dialog(OK,Cancel Ver.)
+            new AlertDialog.Builder(this)
+                    .setTitle("缶情報")
+                    .setMessage(excmd)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .show();
+        }
     }
 
     //タグテキストのコマンド値によって分岐
@@ -419,7 +546,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         else if (cmd.equals(pc.CAN.getString())) {
-            if (mDisplayMode != 0) {
+            //20180516 検量減算式に改修
+            if (mDisplayMode == 0) {
+                //缶状態チェック
+                sendMsgToServer("STT" + sMsg);
+            }
+            else {
                 if (mDisplayMode == 2) {
                     //比重
                     sendMsgToServer(pc.HUP.getString() + sMsg);
@@ -501,6 +633,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initPage() {
         //登録ボタンを無効化
         btnUpd.setEnabled(false);
+        //20180605 風袋重量
+        mHuutai = 0;
 
         //リスト用データを初期化
         mDataList = new ArrayList<>();
@@ -669,7 +803,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 show.setText("缶タグをタッチしてください。");
                 break;
             case 90:
-                show.setText("検量が完了した後、登録してください。");
+                show.setText("収量測定を完了させた後、登録してください。");
                 btnUpd.setEnabled(true);
                 break;
             case 99:

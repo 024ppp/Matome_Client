@@ -21,7 +21,7 @@
                 android:background ="@drawable/frame_hijuu"
                 android:textSize="@dimen/sp_l"
                 android:textColor="@color/white"
-                android:text="比重モード" />
+                android:text="検量＆比重      モード" />
         </LinearLayout>
 
     </RelativeLayout>

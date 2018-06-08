@@ -20,6 +20,7 @@ public enum ProcessCommand {
     SUP("SUP", 6004),
     EUP("EUP", 6005),
 
+    TCD("TCD", 6006),
     CNN("CNN", 6666),
     REC("REC", 7777),
     MSG("MSG", 8888),

@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
         <LinearLayout
-            style="@style/LinearLayoutStyle">
+            style="@style/LinearLayoutStyle2">
             <TextView
                 style="@style/title2"
                 android:layout_width="100dp"
@@ -128,6 +128,24 @@
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:id="@+id/txtKeiryo"/>
+            <TextView
+                android:text="g"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
+            style="@style/LinearLayoutStyle">
+            <TextView
+                style="@style/title2"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="差分"/>
+            <TextView
+                style="@style/item"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:id="@+id/txtSabun"/>
             <TextView
                 android:text="g"
                 android:layout_width="wrap_content"
