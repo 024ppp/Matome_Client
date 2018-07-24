@@ -731,6 +731,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             sendMsgToServer(pc.SUP.getString() + createUpdtext());
                             break;
                     }
+                    //20180724 二度押し防止
+                    btnUpd.setEnabled(false);
+
                     break;
 
                 case R.id.btnClear :
