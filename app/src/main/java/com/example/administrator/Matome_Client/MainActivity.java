@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 txtBcd = (EditText) view.findViewById(R.id.txtIdo);
                 addTCL();
                 txtBcd.requestFocus();
-                show.setText("移動票No.をスキャンしてください。");
+                show.setText("缶をはかりに乗せた状態で、\n移動票No.をスキャンしてください。");
                 break;
             case 4:
                 txtBcd = (EditText) view.findViewById(R.id.txtKokban);
@@ -832,10 +832,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 show.setText("缶タグをタッチしてください。");
                 break;
             case 89:
-                show.setText("缶タグを1つタッチしてください。");
+                show.setText("すべての缶をはかりに乗せてから、\n缶タグを1つタッチしてください。");
                 break;
             case 90:
-                show.setText("収量測定を完了させた後、登録してください。");
+                show.setText("はかりから缶を降ろし、収量測定を完了させてから登録してください。");
                 btnUpd.setEnabled(true);
                 break;
             case 99:

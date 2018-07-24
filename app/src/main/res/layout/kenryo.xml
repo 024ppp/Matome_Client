@@ -22,11 +22,13 @@
                 style="@style/title2"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:textSize="17sp"
                 android:text="移動票No."/>
             <EditText
                 style="@style/item"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:textSize="17sp"
                 android:id="@+id/txtIdo"/>
             <android.support.v4.widget.Space
                 android:layout_width="45dp"
@@ -35,11 +37,13 @@
                 style="@style/title2"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
+                android:textSize="17sp"
                 android:text="缶数"/>
             <TextView
                 style="@style/item"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
+                android:textSize="17sp"
                 android:gravity="center"
                 android:id="@+id/txtCansuu"/>
         </LinearLayout>
@@ -50,11 +54,13 @@
                 style="@style/title2"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:textSize="17sp"
                 android:text="配合粉"/>
             <TextView
                 style="@style/item"
                 android:layout_width="247dp"
                 android:layout_height="wrap_content"
+                android:textSize="17sp"
                 android:id="@+id/txtZainmk"/>
         </LinearLayout>
 
@@ -70,6 +76,7 @@
                 style="@style/title2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="17sp"
                 android:layout_weight="5"
                 android:text="@string/title1"/>
 
@@ -77,6 +84,7 @@
                 style="@style/title2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="17sp"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/title3"/>
@@ -103,11 +111,13 @@
                 style="@style/title2"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:textSize="17sp"
                 android:text="設定値"/>
             <TextView
                 style="@style/item"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:textSize="17sp"
                 android:gravity="right"
                 android:id="@+id/txtJuryo"/>
             <TextView
@@ -121,11 +131,13 @@
                 style="@style/title2"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:textSize="17sp"
                 android:text="計量値"/>
             <TextView
                 style="@style/item"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:textSize="17sp"
                 android:gravity="right"
                 android:id="@+id/txtKeiryo"/>
             <TextView
@@ -139,11 +151,13 @@
                 style="@style/title2"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:textSize="17sp"
                 android:text="差分"/>
             <TextView
                 style="@style/item"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:textSize="17sp"
                 android:gravity="right"
                 android:id="@+id/txtSabun"/>
             <TextView
