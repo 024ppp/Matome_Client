@@ -27,7 +27,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -62,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int mOriginalValue;
     //風袋重量
     int mHuutai;
+    //前回登録ボタン押下時刻
+    Date preDate;
 
 
     //背景のレイアウト
@@ -100,6 +104,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setViews();
         //NFCタグ
         this.nfcTags = new NfcTags(this);
+
+        //現在時刻を取得
+        preDate = new Date();
 
         //test
         //setShowMessage(0);
@@ -720,6 +727,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             .setNegativeButton("Cancel", null)
                             .show();
                     */
+                    //20180724 二度押し防止
+                    btnUpd.setEnabled(false);
+
                     switch (mDisplayMode) {
                         case 1:
                             sendMsgToServer(pc.DUP.getString() + createUpdtext());
@@ -731,11 +741,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             sendMsgToServer(pc.SUP.getString() + createUpdtext());
                             break;
                     }
-                    //20180724 二度押し防止
-                    btnUpd.setEnabled(false);
+
                     break;
 
                 case R.id.btnClear :
+
                     //Dialog(OK,Cancel Ver.)
                     new AlertDialog.Builder(this)
                             .setTitle("確認")
@@ -754,6 +764,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         }
+    }
+
+    //
+    private boolean compareDate() {
+        //現在日時を数値化
+        Date nowDate = new Date();
+        String sBuf = new SimpleDateFormat("yyyyMMddHHmmss").format(nowDate);
+        long lNow = Long.parseLong(sBuf);
+        //前回日時を数値化
+        sBuf = new SimpleDateFormat("yyyyMMddHHmmss").format(preDate);
+        long lPre = Long.parseLong(sBuf);
+        //比較
+        long sa = lNow - lPre;
+
+        //前回日時と比較し、10秒以上差がない場合は処理をスキップする
+        if (sa <= 10) {
+            return true;
+        }
+        return false;
     }
 
     //登録ボタン押下時にサーバに送る更新値の生成
