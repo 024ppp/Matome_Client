@@ -746,6 +746,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 case R.id.btnClear :
 
+                    //test
+                    //if (compareDate()) { return; }
+
                     //Dialog(OK,Cancel Ver.)
                     new AlertDialog.Builder(this)
                             .setTitle("確認")
@@ -775,8 +778,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //前回日時を数値化
         sBuf = new SimpleDateFormat("yyyyMMddHHmmss").format(preDate);
         long lPre = Long.parseLong(sBuf);
+
         //比較
         long sa = lNow - lPre;
+        //前回日時を更新
+        preDate = nowDate;
 
         //前回日時と比較し、10秒以上差がない場合は処理をスキップする
         if (sa <= 10) {
