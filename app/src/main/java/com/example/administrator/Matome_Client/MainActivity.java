@@ -435,14 +435,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             displayGetListItem(buf[1]);
             setShowMessage(88);
         }
-        else if (cmd.equals(pc.DUP.getString())
-                || cmd.equals(pc.HUP.getString())
-                || cmd.equals(pc.KUP.getString())
-                || cmd.equals(pc.SUP.getString())
-                ) {
-            //MyToast.makeText(this, "登録完了しました。", Toast.LENGTH_SHORT, 32f).show();
+        else if (cmd.equals(pc.DUP.getString())) {
             initPage();
-            setShowMessage(10);
+            show.setText("（排出）登録完了しました。\nOPEタグをタッチしてください。");
+        }
+        else if (cmd.equals(pc.HUP.getString())) {
+            initPage();
+            show.setText("（検量比重）登録完了しました。\nOPEタグをタッチしてください。");
+        }
+        else if (cmd.equals(pc.KUP.getString())) {
+            initPage();
+            show.setText("（収量）登録完了しました。\nOPEタグをタッチしてください。");
+        }
+        else if (cmd.equals(pc.SUP.getString())) {
+            initPage();
+            show.setText("（保管）登録完了しました。\nOPEタグをタッチしてください。");
         }
         else if (cmd.equals(pc.MSV.getString())) {
             //checkMeasuringValue(excmd);
