@@ -35,6 +35,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Toolbar toolbar;
     TextView show, txtKeiryo, txtSabun;
+    //20180925 OPEボタン追加
+    Button btnHijuu, btnSyuryo, btnHokan;
+    Button btnHijuu2, btnSyuryo2, btnHokan2;
     Button btnClear, btnUpd;
     EditText txtBcd;
     Handler handler;
@@ -117,8 +120,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int layoutId;
 
         mDisplayMode = mode;
-        //
+        //20180925 OPEボタン追加
         switch (mode) {
+            case 0:
+                title = "まとめ配合TOP";
+                layoutId = R.layout.top;
+                break;
             case 1:
                 title = "排出";
                 layoutId = R.layout.discharge;
@@ -157,6 +164,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mView = view;
 
         switch (mode) {
+            case 0:
+                btnHijuu2 = (Button) findViewById(R.id.btnHIjuu2);
+                btnSyuryo2 = (Button) findViewById(R.id.btnSyuryo2);
+                btnHokan2 = (Button) findViewById(R.id.btnHokan2);
+                //クリックイベント
+                btnHijuu2.setOnClickListener(this);
+                btnSyuryo2.setOnClickListener(this);
+                btnHokan2.setOnClickListener(this);
+                break;
             case 1:
                 //リスト内容更新
                 displayGetListItem(info);
@@ -435,21 +451,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             displayGetListItem(buf[1]);
             setShowMessage(88);
         }
+        //20180925 OPEボタン追加
         else if (cmd.equals(pc.DUP.getString())) {
             initPage();
-            show.setText("（排出）登録完了しました。\nOPEタグをタッチしてください。");
+            show.setText("（排出）登録完了しました。\nモードを選択してください。");
         }
         else if (cmd.equals(pc.HUP.getString())) {
             initPage();
-            show.setText("（検量比重）登録完了しました。\nOPEタグをタッチしてください。");
+            show.setText("（検量比重）登録完了しました。\nモードを選択してください。");
         }
         else if (cmd.equals(pc.KUP.getString())) {
             initPage();
-            show.setText("（収量）登録完了しました。\nOPEタグをタッチしてください。");
+            show.setText("（収量）登録完了しました。\nモードを選択してください。");
         }
         else if (cmd.equals(pc.SUP.getString())) {
             initPage();
-            show.setText("（保管）登録完了しました。\nOPEタグをタッチしてください。");
+            show.setText("（保管）登録完了しました。\nモードを選択してください。");
         }
         else if (cmd.equals(pc.MSV.getString())) {
             //checkMeasuringValue(excmd);
@@ -673,10 +690,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         //TOPに戻る
         mDisplayMode = 0;
+
+        //20180925 OPEボタン追加
+        /*
         toolbar.setTitle("まとめ配合TOP");
         LinearLayout layout = (LinearLayout)findViewById(R.id.layout);
         layout.removeAllViews();
         getLayoutInflater().inflate(R.layout.nfcimag, layout);
+        */
+        changeMode(0,"");
     }
 
     private void initListView() {
@@ -708,7 +730,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if (v != null) {
             switch (v.getId()) {
-                case R.id.btnUpd :
+                //20180925 OPEボタン追加
+                case R.id.btnHIjuu:
+                    changeMode(2, "");
+                    break;
+                case R.id.btnSyuryo:
+                    changeMode(3, "");
+                    break;
+                case R.id.btnHokan:
+                    changeMode(4 , "");
+                    break;
+
+                case R.id.btnHIjuu2:
+                    changeMode(2, "");
+                    break;
+                case R.id.btnSyuryo2:
+                    changeMode(3, "");
+                    break;
+                case R.id.btnHokan2:
+                    changeMode(4 , "");
+                    break;
+
+                case R.id.btnUpd:
                     /* 20180719 登録ダイアログなし
                     //Dialog(OK,Cancel Ver.)
                     new AlertDialog.Builder(this)
@@ -939,9 +982,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(toolbar);
 
         show = (TextView) findViewById(R.id.show);
+
+        //20180925 OPEボタン追加
+        //button
+        btnHijuu = (Button) findViewById(R.id.btnHIjuu);
+        btnSyuryo = (Button) findViewById(R.id.btnSyuryo);
+        btnHokan = (Button) findViewById(R.id.btnHokan);
         btnClear = (Button) findViewById(R.id.btnClear);
         btnUpd = (Button) findViewById(R.id.btnUpd);
         //クリックイベント
+        btnHijuu.setOnClickListener(this);
+        btnSyuryo.setOnClickListener(this);
+        btnHokan.setOnClickListener(this);
         btnClear.setOnClickListener(this);
         btnUpd.setOnClickListener(this);
         //登録ボタンを無効化
