@@ -69,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int mHuutai;
     //前回登録ボタン押下時刻
     Date preDate;
+    //20181002 缶区分適合チェック追加
+    String m_cankbn;
 
 
     //背景のレイアウト
@@ -228,6 +230,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             items = infoset[i].split(",");
             //格納処理
             data.setData(mDisplayMode, items);
+
+            //20181002 缶区分適合チェック
+            m_cankbn = data.getCankbn();
+
             mDataList.add(data);
         }
         //----画面に出力
@@ -315,7 +321,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     continue;
                 }
                 //缶がクリア済みかどうか確認
-                sendMsgToServer("CCC" + can);
+                //20181002 缶区分適合チェックの追加
+                //sendMsgToServer("CCC" + can);
+                sendMsgToServer("CCC" + can + "," + m_cankbn);
                 return;
             }
             //20180516 検量減算式に改修
