@@ -24,28 +24,33 @@
                 android:layout_height="wrap_content"
                 android:textSize="17sp"
                 android:text="移動票No."/>
+
             <EditText
+                android:id="@+id/txtIdo"
                 style="@style/item"
-                android:layout_width="100dp"
+                android:layout_width="145dp"
                 android:layout_height="wrap_content"
-                android:textSize="17sp"
-                android:id="@+id/txtIdo"/>
-            <android.support.v4.widget.Space
-                android:layout_width="45dp"
-                android:layout_height="wrap_content" />
+                android:textSize="17sp" />
+
             <TextView
                 style="@style/title2"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:textSize="17sp"
-                android:text="缶数"/>
+                android:text="缶数"
+                android:textSize="17sp" />
+
             <TextView
+                android:id="@+id/txtCansuu"
                 style="@style/item"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:textSize="17sp"
                 android:gravity="center"
-                android:id="@+id/txtCansuu"/>
+                android:textSize="17sp" />
+
+            <android.support.v4.widget.Space
+                android:layout_width="45dp"
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
 
         <LinearLayout

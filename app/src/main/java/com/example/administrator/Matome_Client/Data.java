@@ -9,6 +9,8 @@ class Data {
     private String zainmk = "";
     private String kokban = "";
     private String cansuu = "";
+    //20181002 缶区分チェック
+    private String cankbn = "";
     private String vkonno = "";
     private String meiban = "";
     private String canTag = "";
@@ -28,9 +30,11 @@ class Data {
                             break;
                         case 3: setCansuu(items[i]);
                             break;
-                        case 4: setVkonno(items[i]);
+                        case 4: setCankbn(items[i]);
                             break;
-                        case 5: setMeiban(items[i]);
+                        case 5: setVkonno(items[i]);
+                            break;
+                        case 6: setMeiban(items[i]);
                             break;
                         default:
                     }
@@ -85,6 +89,13 @@ class Data {
     }
     public String getCansuu() {
         return cansuu;
+    }
+
+    public void setCankbn(String tmp) {
+        this.cankbn = tmp;
+    }
+    public String getCankbn() {
+        return cankbn;
     }
 
     public void setVkonno(String tmp) {

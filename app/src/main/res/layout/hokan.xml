@@ -23,11 +23,12 @@
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:text="工管No."/>
+
             <EditText
+                android:id="@+id/txtKokban"
                 style="@style/itemS"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/txtKokban"/>
+                android:layout_width="100dp"
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <LinearLayout
@@ -50,11 +51,12 @@
                 android:layout_width="54dp"
                 android:layout_height="wrap_content"
                 android:text="ﾛｯﾄNo."/>
+
             <TextView
+                android:id="@+id/txtLotno"
                 style="@style/itemS"
                 android:layout_width="55dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/txtLotno"/>
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <LinearLayout
